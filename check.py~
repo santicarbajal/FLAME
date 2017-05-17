@@ -1,0 +1,26 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Known ranges for the histogram and plot
+xmin, xmax = 0,40
+ymin, ymax = 0, 48
+
+# Generate some random data
+x = np.random.normal(20, 5, 100)
+y = np.random.normal(20, 10, 100)
+
+# Create arrays specifying the bin edges
+nbins = 50
+xbins = np.linspace(xmin, xmax, nbins)
+ybins = np.linspace(ymin, ymax, nbins)
+
+# Create the histogram using the specified bins
+data, _, _ = np.histogram2d(x, y, bins=(xbins, ybins))
+
+# Plot the result
+fig, ax = plt.subplots()
+ax.imshow(data.T, origin='upper', cmap='cubehelix', aspect='auto',
+          interpolation='nearest', extent=[xmin, xmax, ymin, ymax])
+
+ax.axis([xmin, xmax, ymin, ymax])
+plt.show()

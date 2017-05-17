@@ -1,0 +1,149 @@
+__author__ = 'Santi'
+# ###
+# CLOSED. May, 15, 2017
+# ###
+#
+# ###
+import myconstants
+
+import os
+from numpy  import array
+import datetime as dt
+import math
+# ###
+#
+# ###
+
+
+# -----------------------------------------
+def cleanFolder(thePath):
+    """
+        UTILITY
+        WARNING: Deletes everything inside and under the specified path.
+        NOT DOING IT AT THE MOMENT 
+    """
+    print "Cleaning " , thePath
+    pass 
+# -----------------------------------------
+
+
+# -----------------------------------------
+def calculateTimes(inTime, outTime):  # *
+    """
+        UTILITY: calculates difference, in seconds, between two moments in time
+    """
+    result = 0
+    inTime = inTime.split(' ')
+    outTime = outTime.split(' ') 
+    a = dt.datetime(int(inTime[0].split('-')[0]), int(inTime[0].split('-')[1]),int(inTime[0].split('-')[2]),int(inTime[1].split(':')[0]),int(inTime[1].split(':')[1]),int(inTime[1].split(':')[2]))        
+    b = dt.datetime(int(outTime[0].split('-')[0]),int(outTime[0].split('-')[1]),int(outTime[0].split('-')[2]),int(outTime[1].split(':')[0]),int(outTime[1].split(':')[1]),int(outTime[1].split(':')[2]))
+    result = (b-a).total_seconds()
+    #print inTime, outTime
+    return result
+# -----------------------------------------
+
+    
+# -----------------------------------------
+        
+def ensure_dir(file_path): # *
+    """
+        UTILITY: makes sure the directory exists. If not, creates it.
+    """
+    directory = os.path.dirname(file_path)
+       
+    if not os.path.exists(directory):
+        print "Creating ", directory
+        os.makedirs(directory)
+# -----------------------------------------
+
+
+# -----------------------------------------
+def mapIntoSection (x, y): # *
+    """
+        UTILITY.
+        Converts x, y coordinates into a number representing Euclidean 
+        grid  section  
+    """
+    x,y = bend(x,y)
+    newX= int (int (x) / int (myconstants.CELLSIZEX))
+    newY=  int (int (y) / int (myconstants.CELLSIZEY))            
+    section = (newY * myconstants.XRES)   + newX         
+    return section
+
+# -----------------------------------------
+
+
+# ----------------------------------------- 
+def bendIntoGridSection(x, y): # *
+    """
+        UTILITY
+        Same
+    """
+    x,y = bend(x,y) 
+    newX= (int (int (x) / int (myconstants.CELLSIZEX))) * myconstants.CELLSIZEX
+    newY=  int (int (y) / int (myconstants.CELLSIZEY))  * myconstants.CELLSIZEY
+    return newX, newY
+        
+# -----------------------------------------
+
+    
+# -----------------------------------------
+def pixelsToMeters(pX,pY): #*
+    """
+        UTILITY
+        Converts Pixels into meters
+    """ 
+    x = (pX *myconstants.XSIZE) / myconstants.PIXELSX
+    y = (pY *myconstants.YSIZE)/ myconstants.PIXELSY
+    return x,y
+
+# -----------------------------------------
+
+
+# ----------------------------------------- 
+def bend(x,y):  #*
+    """
+        UTILITY
+        For safety issues, if a user is detected outbounds the shop, we fix
+        the problem here.  Searching Paths class does not deal  with dirty 
+        values. 
+    """
+    newX = x
+    newY = y
+    if x > myconstants.XSIZE -1:
+        newX= myconstants.XSIZE -1
+
+    if y > myconstants.YSIZE-1:
+        newY= myconstants.YSIZE-1
+
+    return newX, newY    
+
+# ----------------------------------------- 
+
+
+# -----------------------------------------
+def unique(l):
+    """
+        UTILITY
+        Deletes duplicates from a list.
+        Preserving order.
+        Returns the new one 
+    """
+    unique = []
+    [unique.append(item) for item in l if item not in unique]
+    return unique 
+
+# -----------------------------------------
+
+# ----------------------------------------- 
+def remove_adjacent(nums):
+    """
+        UTILITY
+        Removes adjacent occurrences of the same value inside a list
+        Returns the new one.
+    """
+
+    return [a for a,b in zip(nums, nums[1:]+[not nums[-1]]) if a != b]
+# ----------------------------------------- 
+
+
